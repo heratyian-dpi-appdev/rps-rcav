@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  layout("wrapper")
+  layout("game_wrapper")
+  before_action :set_comp_move
 
   # Add your actions below this line
   # ================================
@@ -9,14 +10,41 @@ class ApplicationController < ActionController::Base
   end
 
   def play_rock
-    render({ template: "game_templates/rock" })
+    if @comp_move == "rock"
+      @outcome = "tied"
+    elsif @comp_move == "paper"
+      @outcome = "lost"
+    elsif @comp_move == "scissors"
+      @outcome = "won"
+    end
+    render template: "game_templates/rock"
   end
 
   def play_paper
-    render({ template: "game_templates/paper" })
+    if @comp_move == "rock"
+      @outcome = "won"
+    elsif @comp_move == "paper"
+      @outcome = "tied"
+    elsif @comp_move == "scissors"
+      @outcome = "lost"
+    end
+    render template: "game_templates/paper"
   end
 
   def play_scissors
-    render({ template: "game_templates/scissors" })
+    if @comp_move == "rock"
+      @outcome = "lost"
+    elsif @comp_move == "paper"
+      @outcome = "won"
+    elsif @comp_move == "scissors"
+      @outcome = "tied"
+    end
+    render template: "game_templates/scissors"
+  end
+
+  private
+
+  def set_comp_move
+    @comp_move = ["rock", "paper", "scissors"].sample
   end
 end
